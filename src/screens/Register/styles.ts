@@ -36,7 +36,7 @@ export const Form = styled.View`
 export const Fields = styled.View``;
 
 export const ButtonsContainer = styled.View`
-  margin-top: 23px;
+  margin-top: 8px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
