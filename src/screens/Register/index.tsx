@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
+import uuid from "react-native-uuid";
 
 import { Button } from "../../components/Forms/Button";
 import { TransactionButton } from "../../components/Forms/TransactionButton";
@@ -8,10 +14,7 @@ import { CategorySelectButton } from "../../components/Forms/CategorySelectButto
 import { Category, CategorySelect } from "../CategorySelect";
 import { InputForm } from "../../components/Forms/InputForm";
 
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-
+import { TRANSACTIONS } from "../../utils/storage";
 import {
   Container,
   Header,
@@ -35,16 +38,18 @@ const schema = Yup.object().shape({
 });
 
 export function Register() {
+  const navigation = useNavigation();
   const [category, setCategory] = useState<Category>({
     key: "category",
     name: "Categoria",
   });
-  const [transactionType, setTransaction] = useState<"up" | "down">();
+  const [transactionType, setTransaction] = useState("");
   const [categoryModal, setCategoryModal] = useState(false);
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -55,14 +60,13 @@ export function Register() {
   }
 
   function handleCloseModal() {
-    console.log("ok");
     setCategoryModal(false);
   }
   function handleOpenModal() {
     setCategoryModal(true);
   }
 
-  function handleRegister(form: FormData) {
+  async function handleRegister(form: FormData) {
     if (!transactionType) {
       return Alert.alert("Selecione o tipo da transação");
     }
@@ -70,13 +74,34 @@ export function Register() {
     if (category.key === "category") {
       return Alert.alert("Selecione a categoria");
     }
-    const data = {
+    const newTransaction = {
+      id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
+      date: new Date(),
     };
-    console.log(data);
+    try {
+      const storageData = await AsyncStorage.getItem(TRANSACTIONS);
+      const currentData = storageData ? JSON.parse(storageData) : [];
+
+      const formattedData = [...currentData, newTransaction];
+
+      await AsyncStorage.setItem(TRANSACTIONS, JSON.stringify(formattedData));
+
+      reset();
+      setTransaction("");
+      setCategory({
+        key: "category",
+        name: "Categoria",
+      });
+
+      navigation.navigate("Listagem");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Não foi possível salvar :(");
+    }
   }
 
   return (
