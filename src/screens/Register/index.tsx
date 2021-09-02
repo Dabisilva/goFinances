@@ -55,6 +55,7 @@ export function Register() {
   }
 
   function handleCloseModal() {
+    console.log("ok");
     setCategoryModal(false);
   }
   function handleOpenModal() {

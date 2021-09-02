@@ -15,6 +15,7 @@ import {
   TextContainer,
   Welcome,
   Username,
+  LogoutButton,
   PowerIcon,
   HighlightCards,
   Transactions,
@@ -81,7 +82,9 @@ export function Dashboard() {
               </TextContainer>
             </ProfileContainer>
 
-            <PowerIcon name="power" />
+            <LogoutButton onPress={() => {}}>
+              <PowerIcon name="power" />
+            </LogoutButton>
           </ProfileWrapper>
         </Header>
 

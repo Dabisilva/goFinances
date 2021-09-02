@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components/native";
+import { RectButton } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 
@@ -6,16 +7,10 @@ interface TransactionProps {
   type?: "up" | "down";
   isActive?: boolean;
 }
-export const Container = styled.TouchableOpacity<TransactionProps>`
+export const Container = styled.View<TransactionProps>`
   width: 48%;
   border: 1.5px solid ${({ theme }) => theme.colors.text};
   border-radius: 5px;
-
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
-  padding: 16px;
 
   ${({ type, isActive }) =>
     isActive &&
@@ -35,6 +30,14 @@ export const Container = styled.TouchableOpacity<TransactionProps>`
     css`
       border: none;
     `};
+`;
+
+export const Button = styled(RectButton)<TransactionProps>`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
 `;
 
 export const Title = styled.Text`
