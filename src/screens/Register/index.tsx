@@ -15,14 +15,8 @@ import { Category, CategorySelect } from "../CategorySelect";
 import { InputForm } from "../../components/Forms/InputForm";
 
 import { TRANSACTIONS } from "../../utils/storage";
-import {
-  Container,
-  Header,
-  Title,
-  Form,
-  Fields,
-  ButtonsContainer,
-} from "./styles";
+import { Container, Form, Fields, ButtonsContainer } from "./styles";
+import { Header } from "../../components/Header";
 
 interface FormData {
   name: string;
@@ -109,9 +103,7 @@ export function Register() {
       <StatusBar style="light" />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
-          <Header>
-            <Title>Cadastro</Title>
-          </Header>
+          <Header title="Cadastro" />
 
           <Form>
             <Fields>
