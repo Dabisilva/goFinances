@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
+
 import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Yup from "yup";
@@ -100,7 +100,6 @@ export function Register() {
 
   return (
     <>
-      <StatusBar style="light" />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
           <Header title="Cadastro" />

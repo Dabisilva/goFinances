@@ -1,6 +1,5 @@
 import React from "react";
 import { FlatList } from "react-native";
-import { StatusBar } from "expo-status-bar";
 
 import { Button } from "../../components/Forms/Button";
 import { categories } from "../../utils/categories";
@@ -37,7 +36,6 @@ export function CategorySelect({
   }
   return (
     <>
-      <StatusBar style="light" />
       <Container>
         <Header>
           <Title>Categoria</Title>

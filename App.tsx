@@ -1,5 +1,6 @@
 import React from "react";
 import AppLoading from "expo-app-loading";
+import { StatusBar } from "expo-status-bar";
 import "intl";
 import "intl/locale-data/jsonp/pt-BR";
 import { ThemeProvider } from "styled-components/native";
@@ -26,6 +27,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <StatusBar style="light" />
       <Routes />
     </ThemeProvider>
   );

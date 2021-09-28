@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { HighlightCard } from "../../components/HighlightCard";
-import { StatusBar } from "expo-status-bar";
+
 import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -144,13 +144,13 @@ export function Dashboard() {
 
   useFocusEffect(
     useCallback(() => {
+      setIsLoading(true);
       getStorageData();
     }, [])
   );
 
   return (
     <>
-      <StatusBar style="light" />
       <Container>
         {isLoading ? (
           <LoadContainer>
