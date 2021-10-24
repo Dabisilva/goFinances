@@ -58,12 +58,20 @@ export function Dashboard() {
     collection: DataListProps[],
     type: "up" | "down"
   ) {
+    const collectionFilttered = collection.filter(
+      (transaction) => transaction.type === type
+    );
+
+    if (collectionFilttered.length === 0) {
+      return 0;
+    }
+
     const transaction = new Date(
       Math.max.apply(
         Math,
-        collection
-          .filter((transaction) => transaction.type === type)
-          .map((transaction) => new Date(transaction.date).getTime())
+        collectionFilttered.map((transaction) =>
+          new Date(transaction.date).getTime()
+        )
       )
     );
 
@@ -114,7 +122,10 @@ export function Dashboard() {
       "down"
     );
 
-    const totalInterval = `01 a ${lastTransactionExpensive}`;
+    const totalInterval =
+      lastTransactionExpensive === 0
+        ? "Não há movimentações"
+        : `01 a ${lastTransactionExpensive}`;
 
     const total = entriesTotal - expensiveTotal;
     setHighlightData({
@@ -123,14 +134,20 @@ export function Dashboard() {
           style: "currency",
           currency: "BRL",
         }),
-        lastTransaction: `Última entrada dia ${lastTransactionEntries}`,
+        lastTransaction:
+          lastTransactionEntries === 0
+            ? "Não há entradas"
+            : `Última entrada dia ${lastTransactionEntries}`,
       },
       expensives: {
         amount: expensiveTotal.toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         }),
-        lastTransaction: `ùltima saída dia ${lastTransactionExpensive}`,
+        lastTransaction:
+          lastTransactionExpensive === 0
+            ? "Não há saídas"
+            : `ùltima saída dia ${lastTransactionExpensive}`,
       },
       total: {
         amount: total.toLocaleString("pt-BR", {
