@@ -13,6 +13,7 @@ import {
 
 import { theme } from "./src/global/styles/theme";
 import { Routes } from "./src/routes";
+import { AuthProvider, useAuth } from "./src/context/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,14 +22,18 @@ export default function App() {
     Poppins_700Bold,
   });
 
-  if (!fontsLoaded) {
+  const { load } = useAuth();
+
+  if (!fontsLoaded || load) {
     return <AppLoading />;
   }
 
   return (
     <ThemeProvider theme={theme}>
       <StatusBar style="light" />
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

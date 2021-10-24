@@ -1,3 +1,3 @@
-const TRANSACTIONS = "@gofinances:transactions";
+const TRANSACTIONS = "@gofinances:transactions_user:";
 
 export { TRANSACTIONS };

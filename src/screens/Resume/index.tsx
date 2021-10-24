@@ -14,6 +14,7 @@ import { HistoryCard } from "../../components/HistoryCard";
 import { TRANSACTIONS } from "../../utils/storage";
 import { categories } from "../../utils/categories";
 import { theme } from "../../global/styles/theme";
+import { useAuth } from "../../context/AuthContext";
 
 import {
   Container,
@@ -45,6 +46,7 @@ interface CategoryData {
 
 export function Resume() {
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [categoriesData, setCategoriesData] = useState<CategoryData[]>([]);
 
@@ -57,7 +59,7 @@ export function Resume() {
   }
 
   async function loadData() {
-    const response = await AsyncStorage.getItem(TRANSACTIONS);
+    const response = await AsyncStorage.getItem(`${TRANSACTIONS}${user.id}`);
     const responseFormatted = response ? JSON.parse(response) : [];
 
     const expensives = responseFormatted.filter(

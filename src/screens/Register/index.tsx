@@ -17,6 +17,7 @@ import { InputForm } from "../../components/Forms/InputForm";
 import { TRANSACTIONS } from "../../utils/storage";
 import { Container, Form, Fields, ButtonsContainer } from "./styles";
 import { Header } from "../../components/Header";
+import { useAuth } from "../../context/AuthContext";
 
 interface FormData {
   name: string;
@@ -33,6 +34,8 @@ const schema = Yup.object().shape({
 
 export function Register() {
   const navigation = useNavigation();
+  const { user } = useAuth();
+
   const [category, setCategory] = useState<Category>({
     key: "category",
     name: "Categoria",
@@ -77,12 +80,13 @@ export function Register() {
       date: new Date(),
     };
     try {
-      const storageData = await AsyncStorage.getItem(TRANSACTIONS);
+      const dataKey = `${TRANSACTIONS}${user.id}`;
+      const storageData = await AsyncStorage.getItem(dataKey);
       const currentData = storageData ? JSON.parse(storageData) : [];
 
       const formattedData = [...currentData, newTransaction];
 
-      await AsyncStorage.setItem(TRANSACTIONS, JSON.stringify(formattedData));
+      await AsyncStorage.setItem(dataKey, JSON.stringify(formattedData));
 
       reset();
       setTransaction("");

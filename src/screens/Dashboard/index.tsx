@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { HighlightCard } from "../../components/HighlightCard";
 
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../context/AuthContext";
 
 import { theme } from "../../global/styles/theme";
 import {
@@ -46,6 +47,7 @@ interface HighlightData {
 }
 
 export function Dashboard() {
+  const { signOut, user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>(
@@ -71,7 +73,7 @@ export function Dashboard() {
   }
 
   async function getStorageData() {
-    const storageData = await AsyncStorage.getItem(TRANSACTIONS);
+    const storageData = await AsyncStorage.getItem(`${TRANSACTIONS}${user.id}`);
     const transactions = storageData ? JSON.parse(storageData) : [];
 
     let entriesTotal = 0;
@@ -142,6 +144,19 @@ export function Dashboard() {
     setIsLoading(false);
   }
 
+  function handleSignOut() {
+    Alert.alert("Alerta", "Deseja sair?", [
+      {
+        onPress: () => {},
+        text: "Não",
+      },
+      {
+        onPress: signOut,
+        text: "Sim",
+      },
+    ]);
+  }
+
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
@@ -167,16 +182,16 @@ export function Dashboard() {
                 <ProfileContainer>
                   <ImageProfile
                     source={{
-                      uri: "https://avatars.githubusercontent.com/u/57877449?v=4",
+                      uri: user.photo,
                     }}
                   />
                   <TextContainer>
                     <Welcome>Olá</Welcome>
-                    <Username>Davi</Username>
+                    <Username>{user.name}</Username>
                   </TextContainer>
                 </ProfileContainer>
 
-                <LogoutButton onPress={() => {}}>
+                <LogoutButton onPress={handleSignOut}>
                   <PowerIcon name="power" />
                 </LogoutButton>
               </ProfileWrapper>
